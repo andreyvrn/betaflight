@@ -130,6 +130,7 @@ const OSD_Entry menuOsdActiveElemsEntries[] =
     {"ESC RPM",            OME_VISIBLE | DYNAMIC, NULL, &osdConfig_item_pos[OSD_ESC_RPM]},
 #endif
     {"ALTITUDE",           OME_VISIBLE | DYNAMIC, NULL, &osdConfig_item_pos[OSD_ALTITUDE]},
+    {"FAKE ALTITUDE",      OME_VISIBLE | DYNAMIC, NULL, &osdConfig_item_pos[OSD_FAKE_ALTITUDE]},
     {"POWER",              OME_VISIBLE | DYNAMIC, NULL, &osdConfig_item_pos[OSD_POWER]},
     {"ROLL PID",           OME_VISIBLE | DYNAMIC, NULL, &osdConfig_item_pos[OSD_ROLL_PIDS]},
     {"PITCH PID",          OME_VISIBLE | DYNAMIC, NULL, &osdConfig_item_pos[OSD_PITCH_PIDS]},

@@ -742,6 +742,15 @@ static void osdElementAltitude(osdElementParms_t *element)
     }
 }
 
+static void osdElementFakeAltitude(osdElementParms_t *element)
+{
+    // Synthetic triangular wave in centimeters: 0.0m .. 99.0m .. 0.0m
+    const uint32_t phase = (micros() / 100000) % 200;
+    const uint32_t rising = (phase < 100) ? phase : (200 - phase);
+    const int32_t fakeAltitudeCm = (int32_t)(rising * 100);
+    osdFormatAltitudeString(element->buff, fakeAltitudeCm, element->type);
+}
+
 #ifdef USE_ACC
 static void osdElementAngleRollPitch(osdElementParms_t *element)
 {
@@ -1867,6 +1876,7 @@ static const uint8_t osdElementDisplayOrder[] = {
     OSD_CUSTOM_MSG2,
     OSD_CUSTOM_MSG3,
     OSD_ALTITUDE,
+    OSD_FAKE_ALTITUDE,
     OSD_ROLL_PIDS,
     OSD_PITCH_PIDS,
     OSD_YAW_PIDS,
@@ -2096,6 +2106,7 @@ const osdElementDrawFn osdElementDrawFunction[OSD_ITEM_COUNT] = {
 #ifdef USE_RANGEFINDER
     [OSD_LIDAR_DIST]              = osdElementLidarDist,
 #endif
+    [OSD_FAKE_ALTITUDE]           = osdElementFakeAltitude,
 };
 
 // Define the mapping between the OSD element id and the function to draw its background (static part)
