@@ -175,6 +175,9 @@
 
 #include "sensors/adcinternal.h"
 #include "sensors/barometer.h"
+#ifdef USE_BARO2
+#include "sensors/barometer2.h"
+#endif
 #include "sensors/battery.h"
 #include "sensors/sensors.h"
 #include "sensors/rangefinder.h"
@@ -1840,6 +1843,20 @@ static void osdElementSys(osdElementParms_t *element)
 }
 #endif
 
+#ifdef USE_BARO2
+static void osdElementBaro2Altitude(osdElementParms_t *element)
+{
+    if (isBaro2Ready()) {
+        const int32_t baro2AltCm = lrintf(getBaro2Altitude());
+        osdFormatAltitudeString(element->buff, baro2AltCm, element->type);
+    } else {
+        element->buff[0] = SYM_ALTITUDE;
+        element->buff[1] = SYM_HYPHEN;
+        element->buff[2] = '\0';
+    }
+}
+#endif
+
 // Define the order in which the elements are drawn.
 // Elements positioned later in the list will overlay the earlier
 // ones if their character positions overlap
@@ -1948,6 +1965,9 @@ static const uint8_t osdElementDisplayOrder[] = {
 #endif
 #ifdef USE_RANGEFINDER
     OSD_LIDAR_DIST,
+#endif
+#ifdef USE_BARO2
+    OSD_BARO2_ALTITUDE,
 #endif
 };
 
@@ -2095,6 +2115,9 @@ const osdElementDrawFn osdElementDrawFunction[OSD_ITEM_COUNT] = {
 #endif
 #ifdef USE_RANGEFINDER
     [OSD_LIDAR_DIST]              = osdElementLidarDist,
+#endif
+#ifdef USE_BARO2
+    [OSD_BARO2_ALTITUDE]          = osdElementBaro2Altitude,
 #endif
 };
 

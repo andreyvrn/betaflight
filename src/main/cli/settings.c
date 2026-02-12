@@ -124,6 +124,9 @@
 
 #include "sensors/acceleration.h"
 #include "sensors/barometer.h"
+#ifdef USE_BARO2
+#include "sensors/barometer2.h"
+#endif
 #include "sensors/battery.h"
 #include "sensors/boardalignment.h"
 #include "sensors/compass.h"
@@ -211,7 +214,8 @@ const char * const lookupTableBaroHardware[BARO_HARDWARE_COUNT] = {
     [BARO_DPS310] = "DPS310",
     [BARO_2SMPB_02B] = "2SMPB_02B",
     [BARO_LPS22DF] = "LPS22DF",
-    [BARO_VIRTUAL] = "VIRTUAL"
+    [BARO_VIRTUAL] = "VIRTUAL",
+    [BARO_SPL06] = "SPL06"
 };
 
 // sync with magSensor_e
@@ -876,6 +880,14 @@ const clivalue_t valueTable[] = {
     { "baro_i2c_device",            VAR_UINT8  | HARDWARE_VALUE, .config.minmaxUnsigned = { 0, 5 }, PG_BAROMETER_CONFIG, offsetof(barometerConfig_t, baro_i2c_device) },
     { "baro_i2c_address",           VAR_UINT8  | HARDWARE_VALUE, .config.minmaxUnsigned = { 0, I2C_ADDR7_MAX }, PG_BAROMETER_CONFIG, offsetof(barometerConfig_t, baro_i2c_address) },
     { PARAM_NAME_BARO_HARDWARE,     VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP, .config.lookup = { TABLE_BARO_HARDWARE }, PG_BAROMETER_CONFIG, offsetof(barometerConfig_t, baro_hardware) },
+#endif
+
+#ifdef USE_BARO2
+    { "baro2_bustype",              VAR_UINT8  | HARDWARE_VALUE | MODE_LOOKUP, .config.lookup = { TABLE_BUS_TYPE }, PG_BARO2_CONFIG, offsetof(baro2Config_t, baro2_busType) },
+    { "baro2_i2c_device",           VAR_UINT8  | HARDWARE_VALUE, .config.minmaxUnsigned = { 0, 5 }, PG_BARO2_CONFIG, offsetof(baro2Config_t, baro2_i2c_device) },
+    { "baro2_i2c_address",          VAR_UINT8  | HARDWARE_VALUE, .config.minmaxUnsigned = { 0, I2C_ADDR7_MAX }, PG_BARO2_CONFIG, offsetof(baro2Config_t, baro2_i2c_address) },
+    { "baro2_spi_device",           VAR_UINT8  | HARDWARE_VALUE, .config.minmaxUnsigned = { 0, 5 }, PG_BARO2_CONFIG, offsetof(baro2Config_t, baro2_spi_device) },
+    { "baro2_hardware",             VAR_UINT8  | MASTER_VALUE | MODE_LOOKUP, .config.lookup = { TABLE_BARO_HARDWARE }, PG_BARO2_CONFIG, offsetof(baro2Config_t, baro2_hardware) },
 #endif
 
 // PG_RX_CONFIG
@@ -1743,6 +1755,9 @@ const clivalue_t valueTable[] = {
 #ifdef USE_RANGEFINDER
     { "osd_lidar_dist_pos",         VAR_UINT16  | MASTER_VALUE, .config.minmaxUnsigned = { 0, OSD_POSCFG_MAX }, PG_OSD_ELEMENT_CONFIG, offsetof(osdElementConfig_t, item_pos[OSD_LIDAR_DIST]) },
 #endif //USE_RANGEFINDER
+#ifdef USE_BARO2
+    { "osd_baro2_altitude_pos",     VAR_UINT16  | MASTER_VALUE, .config.minmaxUnsigned = { 0, OSD_POSCFG_MAX }, PG_OSD_ELEMENT_CONFIG, offsetof(osdElementConfig_t, item_pos[OSD_BARO2_ALTITUDE]) },
+#endif
 #endif // end of #ifdef USE_OSD
 
 // PG_SYSTEM_CONFIG

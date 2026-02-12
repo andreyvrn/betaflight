@@ -92,6 +92,9 @@
 #include "sensors/acceleration.h"
 #include "sensors/adcinternal.h"
 #include "sensors/barometer.h"
+#ifdef USE_BARO2
+#include "sensors/barometer2.h"
+#endif
 #include "sensors/battery.h"
 #include "sensors/compass.h"
 #include "sensors/esc_sensor.h"
@@ -266,6 +269,18 @@ static void taskUpdateBaro(timeUs_t currentTimeUs)
 }
 #endif
 
+#ifdef USE_BARO2
+static void taskUpdateBaro2(timeUs_t currentTimeUs)
+{
+    if (isBaro2Ready()) {
+        const uint32_t newDeadline = baro2Update(currentTimeUs);
+        if (newDeadline != 0) {
+            rescheduleTask(TASK_SELF, newDeadline);
+        }
+    }
+}
+#endif
+
 #ifdef USE_MAG
 static void taskUpdateMag(timeUs_t currentTimeUs)
 {
@@ -407,6 +422,10 @@ task_attribute_t task_attributes[TASK_COUNT] = {
 
 #ifdef USE_BARO
     [TASK_BARO] = DEFINE_TASK("BARO", NULL, NULL, taskUpdateBaro, TASK_PERIOD_HZ(TASK_BARO_RATE_HZ), TASK_PRIORITY_LOW),
+#endif
+
+#ifdef USE_BARO2
+    [TASK_BARO2] = DEFINE_TASK("BARO2", NULL, NULL, taskUpdateBaro2, TASK_PERIOD_HZ(TASK_BARO_RATE_HZ), TASK_PRIORITY_LOW),
 #endif
 
 #if defined(USE_BARO) || defined(USE_GPS)
@@ -581,6 +600,10 @@ void tasksInit(void)
 
 #ifdef USE_BARO
     setTaskEnabled(TASK_BARO, sensors(SENSOR_BARO));
+#endif
+
+#ifdef USE_BARO2
+    setTaskEnabled(TASK_BARO2, isBaro2Ready());
 #endif
 
 #if defined(USE_BARO) || defined(USE_GPS)

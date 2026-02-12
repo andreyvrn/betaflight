@@ -178,6 +178,9 @@ const OSD_Entry menuOsdActiveElemsEntries[] =
 #ifdef USE_RANGEFINDER
     {"LIDAR DIST",         OME_VISIBLE | DYNAMIC, NULL, &osdConfig_item_pos[OSD_LIDAR_DIST]},
 #endif
+#ifdef USE_BARO2
+    {"BARO2 ALT",          OME_VISIBLE | DYNAMIC, NULL, &osdConfig_item_pos[OSD_BARO2_ALTITUDE]},
+#endif
     {"BACK",               OME_Back,    NULL, NULL},
     {NULL,                 OME_END,     NULL, NULL}
 };

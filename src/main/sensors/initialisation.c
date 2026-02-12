@@ -39,6 +39,9 @@
 #include "sensors/acceleration.h"
 #include "sensors/adcinternal.h"
 #include "sensors/barometer.h"
+#ifdef USE_BARO2
+#include "sensors/barometer2.h"
+#endif
 #include "sensors/compass.h"
 #include "sensors/gyro.h"
 #include "sensors/gyro_init.h"
@@ -63,6 +66,10 @@ void sensorsPreInit(void)
 #ifdef USE_BARO
     baroPreInit();
 #endif
+
+#ifdef USE_BARO2
+    baro2PreInit();
+#endif
 }
 
 bool sensorsAutodetect(void)
@@ -80,6 +87,10 @@ bool sensorsAutodetect(void)
 
 #ifdef USE_BARO
     baroInit();
+#endif
+
+#ifdef USE_BARO2
+    baro2Init();
 #endif
 
 #ifdef USE_MAG
